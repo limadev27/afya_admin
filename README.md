@@ -1,25 +1,31 @@
-# afya_admin# Afya Admin — Dashboard com Blazor WebAssembly e MudBlazor
+# Afya Admin — Dashboard com Blazor WebAssembly e MudBlazor
+
 
 ## Identificação
 
 | | |
 |---|---|
-| **Aluno(a)** | Isac ... (COMPLETE com seu nome completo) |
+| **Aluno(a)** | Isac Alves de Lima Silva |
 | **Matrícula** | 000000 |
-| **Faculdade** | Afya ... (nome da faculdade) |
-| **Curso** | Nome do curso |
-| **Disciplina** | Programação de Sistemas Web (confira o nome oficial) |
-| **Professor(a)** | Nome do professor(a) |
+| **Faculdade** | Afya - São Lucas |
+| **Curso** | Ciência da Computação |
+| **Disciplina** | Programação de Sistemas Web |
+| **Professor(a)** | Liluyoud Cury |
 | **Semestre** | 2026.2 |
 
 ## Objetivo do projeto
 
-_ESCREVA AQUI, com suas palavras (2 a 4 parágrafos): o que é o projeto, o que a página faz (sidebar, AppBar, KPIs, gráficos, Performance, Atividades, tabela), que os dados são fictícios e que todo o visual vem do MudBlazor, sem CSS próprio._
+O projeto é um Dashboard para o trabalho de programação web. A ideia é mostrar as principais informações do sistema de forma simples e organizada. A página tem um menu lateral para acessar outras áreas e uma barra superior com pesquisa, notificações, troca de tema e informações do usuário.
+
+Na página principal são mostrados alguns números importantes, gráficos sobre a receita e os clientes, o andamento dos projetos e as atividades recentes. Também há uma tabela com os projetos mais recentes, mostrando informações como cliente, responsável, situação, progresso e prazo.
+
+Os dados usados no projeto são fictícios e servem apenas para mostrar como a página funciona. Todo o visual foi feito usando o MudBlazor, sem criar um CSS próprio. Foram usados os recursos do próprio MudBlazor para montar os botões, menus, gráficos, tabelas, cards e outras partes da página.
+
 
 ## Tecnologias utilizadas
 
-- .NET 10 / Blazor WebAssembly (aplicação autônoma, sem servidor)
-- MudBlazor 9 (componentes, tema e classes utilitárias)
+- .NET 10 / Blazor WebAssembly 
+- MudBlazor
 - C# e Razor
 - Fonte Inter (Google Fonts), aplicada pelo tema
 - Git e GitHub (versionamento)
@@ -30,12 +36,12 @@ _ESCREVA AQUI, com suas palavras (2 a 4 parágrafos): o que é o projeto, o que 
 Pré-requisito: **.NET SDK 10** (confira com `dotnet --version`, que deve começar com `10.`).
 
 ```bash
-git clone https://github.com/SEU-USUARIO/afya-admin.git
-cd afya-admin
+git clone https://github.com/limadev27/afya-admin.git
 dotnet watch
 ```
 
-O terminal mostra a URL (algo como `http://localhost:5147`; a porta pode variar). Use a que aparecer.
+O terminal mostra a URL (algo como `http://localhost:porta-aleatoria`) Use a que aparecer.
+
 
 ## Telas
 
@@ -51,7 +57,15 @@ O terminal mostra a URL (algo como `http://localhost:5147`; a porta pode variar)
 ### HTML gerado (DevTools)
 ![Inspeção do HTML no DevTools](docs/prints/devtools.png)
 
-_ESCREVA AQUI, olhando o seu print, em poucas linhas: qual elemento você inspecionou (KPI e botão), quais tags HTML o Blazor gerou para `MudPaper`, `MudStack` e `MudButton`, quais classes apareceram (`mud-paper`, `mud-elevation-1`...) e onde aparece o `pa-4` que você escreveu no código._
+![Inspeção do card de KPI](docs/prints/devtools-kpi.png)
+
+Com a aplicação rodando, usei a aba Elements do DevTools (F12) para inspecionar um botão e um card de KPI.
+
+**Botão "Novo Projeto".** O `<MudButton>` foi renderizado como uma tag `<button type="button">` com as classes `mud-button-root mud-button mud-button-filled mud-button-filled-primary mud-button-filled-size-large mud-ripple`. Cada parâmetro que escrevi no código virou uma classe: `Variant.Filled` gerou `mud-button-filled`, `Color.Primary` gerou `mud-button-filled-primary` e `Size.Large` gerou `mud-button-filled-size-large`. O texto do botão fica dentro de um `<span class="mud-button-label">`. Logo acima dele está o `<MudStack>` do `CabecalhoPagina`, renderizado como `<div role="group" class="d-flex flex-row align-center gap-3">`: `Row="true"` virou `flex-row`, `AlignItems.Center` virou `align-center` e `Spacing="3"` virou `gap-3`.
+
+**Card de KPI "Receita".** O `<MudPaper>` virou um `<div class="mud-paper mud-elevation-1 pa-4" style="height:100%;">`: o parâmetro `Elevation="1"` gerou a classe `mud-elevation-1` e o `Height="100%"` virou o atributo `style`. A classe `pa-4`, que escrevi em `Class="pa-4"`, aparece no final da lista de classes, junto das geradas pelo MudBlazor, sem nenhuma alteração. Por fora do card está o `<MudItem xs="12" sm="6" lg="3">`, renderizado como `<div class="mud-grid-item mud-grid-item-xs-12 mud-grid-item-sm-6 mud-grid-item-lg-3">`, que é o que faz o card ocupar 12, 6 ou 3 colunas conforme a largura da tela.
+
+**Conclusão.** A inspeção mostra que o Blazor transforma cada componente Razor em HTML comum (`div`, `button`, `span`) e converte os parâmetros em classes CSS do MudBlazor, enquanto as classes utilitárias que escrevo em `Class` são repassadas ao HTML final sem alteração. Por isso foi possível montar o visual sem escrever CSS próprio.
 
 ## Estrutura do projeto
 
@@ -116,43 +130,52 @@ afya-admin/
 
 **1. Como uma aplicação Blazor WebAssembly inicia no navegador? Qual é o papel do `index.html`, da `<div id="app">` e do `Program.cs`?**
 
-_Escreva aqui._
+Uma aplicação Blazor WebAssembly começa carregando a página index.html no navegador. Esse arquivo é a primeira página que o navegador recebe e contém a estrutura básica da aplicação, além de carregar os arquivos necessários para iniciar o Blazor.
+
+A <div id="app"> é o espaço onde a aplicação Blazor será exibida. Quando o Blazor é iniciado, ele encontra essa div e coloca dentro dela os componentes da aplicação, como páginas, menus e outros elementos.
+
+Já o Program.cs é responsável por iniciar a aplicação Blazor. Nele, o projeto é configurado e os componentes principais são registrados. Também é onde serviços, como o MudBlazor, são adicionados. Resumindo: o index.html inicia a página, a <div id="app"> é onde o sistema aparece e o Program.cs configura e inicia o Blazor.
 
 **2. Qual é a diferença entre um Layout, uma Page e um Component neste projeto? Dê um exemplo de cada.**
 
-_Escreva aqui._
+°Layout: define a estrutura geral. Ex.: MainLayout.razor.
+
+°Page: representa uma tela acessada por uma URL. Ex.: Dashboard.razor.
+
+°Component: é uma parte reutilizável da interface. Ex.: KpiCard.razor.
 
 **3. O que é um `RenderFragment` e como o `DashboardCard` usa esse recurso para ser reutilizado por vários cards?**
 
-_Escreva aqui._
+RenderFragment permite colocar diferentes conteúdos dentro de um componente. No DashboardCard, ele permite reutilizar o mesmo modelo de card, mudando apenas o conteúdo de cada um.
 
 **4. Como funciona o `@bind-Valor` no `SeletorPeriodo`? Qual é o papel do `ValorChanged`?**
 
-_Escreva aqui._
+O @bind-Valor conecta o valor escolhido no SeletorPeriodo com a variável _periodo. O ValorChanged avisa quando o valor muda e atualiza a variável.
 
 **5. Por que os dados ficam na pasta `Data`, separados dos componentes? Que vantagem isso traz se, no futuro, os dados vierem de uma API?**
 
-_Escreva aqui._
+Para deixar os dados separados da parte visual do sistema. Assim, se no futuro os dados vierem de uma API, podemos trocar a fonte dos dados sem precisar alterar todos os componentes.
 
 **6. Como o `MudGrid` com `xs`, `sm` e `lg` faz os cards de KPI se reorganizarem em telas de tamanhos diferentes?**
 
-_Escreva aqui._
+O xs, sm e lg definem quantos espaços cada card ocupa em diferentes tamanhos de tela. Assim, os cards conseguem se organizar automaticamente em telas pequenas, médias e grandes.
 
 **7. Como foi possível estilizar a página inteira sem escrever CSS? Explique o papel do tema (`MudTheme`) e das classes utilitárias.**
 
-_Escreva aqui._
+Foi usado o MudTheme para definir cores, fontes e outros padrões visuais. Também foram usadas classes prontas do MudBlazor para espaçamento, alinhamento, tamanho e outras partes da aparência.
 
 **8. Por que o namespace do projeto é `afya_admin` e não `afya-admin`?**
 
-_Escreva aqui._
+Porque o nome do projeto usa afya-admin, mas o C# não permite hífen em nomes de namespace. Por isso, o hífen é substituído por _, ficando afya_admin
 
 ## Dificuldades e soluções
 
-_Descreva pelo menos dois problemas reais que VOCÊ enfrentou e como resolveu cada um (sintoma, causa, solução). Dica: lembre do que aconteceu no seu caminho até aqui, por exemplo com os arquivos dos prints ou com o repositório Git._
+1. Adaptar-me ao formato de sintaxe do Blazor:
+No começo tive dificuldade para entender a forma correta de escrever os componentes e seus parâmetros. Resolvi isso seguindo o padrão do Blazor e organizando melhor as tags e os códigos.
 
-1. _Escreva aqui._
-2. _Escreva aqui._
+2. Trabalhar sem CSS próprio:
+Também tive dificuldade para montar o visual sem criar CSS personalizado. Resolvi usando os componentes, temas e classes prontas do MudBlazor para fazer os espaçamentos, cores e alinhamentos.
 
 ## Melhorias futuras (opcional)
 
-_Se fez algum desafio da seção 20 do tutorial, descreva aqui. Se não, diga o que implementaria a seguir._
+Eu implementaria o período funcional, fazendo com que a troca de período no SeletorPeriodo alterasse os valores dos KPIs. Assim, o dashboard ficaria mais interativo e os dados apresentados mudariam de acordo com o período escolhido.
