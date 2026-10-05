@@ -26,6 +26,11 @@
     private string _periodo = "Últimos 30 dias";
 }
 
-<DashboardCard Titulo="Teste" Subtitulo="Só para ver">
-    Conteúdo aqui
-</DashboardCard>
+<MudGrid Spacing="3">
+    @foreach (var kpi in DashboardData.Kpis)
+    {
+        <MudItem xs="12" sm="6" lg="3">
+            <KpiCard Kpi="kpi" />
+        </MudItem>
+    }
+</MudGrid>
